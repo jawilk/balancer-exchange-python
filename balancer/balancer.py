@@ -2,6 +2,7 @@ import json
 
 from web3 import Web3
 
+from utils import load_abi
 import keys
 
 w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/'+keys.INFURA_ID))
@@ -12,22 +13,16 @@ class BalancerPool():
 
     def __init__(self, contract_address):
         self.contract_address = contract_address
-        self.contract_abi = self._load_abi()
+        self.contract_abi = load_abi(self.ABI_PATH)
         self.contract = w3.eth.contract(
                             address=self.contract_address,
                             abi=self.contract_abi,
                         )
 
         # Pool properties
-        self.bone = self.get_bone()
-        self.fee = self.get_swap_fee()
-        self.num_tokens = self.get_num_tokens()
-        
-
-    def _load_abi(self):
-        with open(self.ABI_PATH) as f:
-            contract_abi = json.load(f)
-        return contract_abi
+        #self.bone = self.get_bone()
+        #self.fee = self.get_swap_fee()
+        #self.num_tokens = self.get_num_tokens()
 
     def get_bone(self):
         return self.contract.functions.BONE().call()
