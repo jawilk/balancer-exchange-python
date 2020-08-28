@@ -2,6 +2,10 @@ from gql import gql, Client, AIOHTTPTransport
 from web3 import Web3
 
 from balancer import Pool
+import keys
+
+
+w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/'+keys.INFURA_ID))
 
 
 transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/name/balancer-labs/balancer")
@@ -38,8 +42,8 @@ pools = pools['pools']
 all_pools = []
 for pool in pools:
     all_pools.append(Pool(
+        w3=w3,
         contract_address = Web3.toChecksumAddress(pool['id']),
-        address_only = False,
         finalized = pool['finalized'],
         public_swap = pool['publicSwap'],
         swap_fee = pool['swapFee'],
@@ -48,4 +52,4 @@ for pool in pools:
         tokens = pool['tokens'],
     ))
 
-print(all_pools[0].tokens[0].symbol)
+print(all_pools[0].get_final_tokens()[0].symbol)
