@@ -56,7 +56,6 @@ class Pool:
         total_weight=None,
         tokens_list=None,
         tokens=None,
-        bone=None,
     ):
         self.contract_address = contract_address
         self.contract_abi = load_abi(self.ABI_PATH)
@@ -67,34 +66,146 @@ class Pool:
 
         # Pool properties
         self.properties = {
-            'finalized': finalized,
-            'public_swap': public_swap,
-            'swap_fee': swap_fee,
-            'total_weight': total_weight,
+            'isFinalized': finalized,
+            'isPublicSwap': public_swap,
+            'getSwapFee': swap_fee,
+            'getTotalDenormalizedWeight': total_weight,
             'tokens_list': tokens_list,
             'getFinalTokens': initialize_tokens(tokens) if tokens else None,
-            'BONE': bone,
-            'getNormalizedWeight': None,
         }
 
     def _set_value(self, prop, *argv):
         if argv:
-            self.properties[prop] = self.properties[prop] if self.properties[prop] else self.contract.get_function_by_name(prop)(*argv).call()
+            self.properties[prop] = self.properties[prop] if self.properties.get(prop) else self.contract.get_function_by_name(prop)(*argv).call()
             return self.properties[prop]
-        self.properties[prop] = self.properties[prop] if self.properties[prop] else self.contract.get_function_by_name(prop)().call()
+        self.properties[prop] = self.properties[prop] if self.properties.get(prop) else self.contract.get_function_by_name(prop)().call()
         return self.properties[prop]
 
-    def get_bone(self):
+    def bone(self):
         return self._set_value('BONE')
 
-    def get_num_tokens(self):
-        return len(self.tokens)
+    def bpow_precision(self):
+        return self._set_value('BPOW_PRECISION')
 
-    def get_final_tokens(self):
+    def exit_fee(self):
+        return self._set_value('EXIT_FEE')
+
+    def init_pool_supply(self):
+        return self._set_value('INIT_POOL_SUPPLY')
+
+    def max_bound_tokens(self):
+        return self._set_value('MAX_BOUND_TOKENS')
+
+    def max_bpow_base(self):
+        return self._set_value('MAX_BPOW_BASE')
+
+    def max_fee(self):
+        return self._set_value('MAX_FEE')
+
+    def max_in_ratio(self):
+        return self._set_value('MAX_IN_RATIO')
+
+    def max_out_ratio(self):
+        return self._set_value('MAX_OUT_RATIO')
+
+    def max_total_weight(self):
+        return self._set_value('MAX_TOTAL_WEIGHT')
+
+    def max_weight(self):
+        return self._set_value('MAX_WEIGHT')
+
+    def min_balance(self):
+        return self._set_value('MIN_BAlANCE')
+
+    def min_bound_tokens(self):
+        return self._set_value('MIN_BOUND_TOKENS')
+
+    def min_bpow_base(self):
+        return self._set_value('MIN_BPOW_BASE')
+
+    def min_fee(self):
+        return self._set_value('MIN_FEE')
+
+    def min_weight(self):
+        return self._set_value('MIN_WEIGHT')
+
+    def allowance(self, src_address, dst_address):
+        return self._set_value('ALLOWANCE', src_address, dst_address)
+
+    def balance_of(self, address):
+        return self._set_value('BALANCE_OF', address)
+
+    def decimals(self):
+        return self._set_value('decimals')
+
+    def color(self):
+        return self._set_value('getColor')
+
+    def controller(self):
+        return self._set_value('getController')
+
+    def final_tokens(self):
         return self._set_value('getFinalTokens')
 
-    def get_normalized_weight(self, address):
-        return self._set_value('getNormalizedWeight', address) / 10**16
+    def swap_fee(self):
+        return self._set_value('getSwapFee')
 
-    def get_spot_price(self, address_in, address_out):
-        return self.contract.functions.getSpotPrice(address_in, address_out).call()
+    def total_denormalized_weight(self):
+        return self._set_value('getTotalDenormalizedWeight')
+
+    def is_finalized(self):
+        return self._set_value('isFinalized)
+
+    def is_public_swap(self):
+        return self._set_value('isPublicSwap')
+
+    def name(self):
+        return self._set_value('name')
+
+    def symbol(self):
+        return self._set_value('symbol')
+
+    def total_supply(self):
+        return self._set_value('totalSupply')
+
+    def calc_in_given_out(self, *argv):
+        return self.contract.functions.calcInGivenOut(*argv).call()
+
+    def calc_out_given_in(self, *argv):
+        return self.contract.functions.calcOutGivenIn(*argv).call()
+
+    def calc_pool_in_given_single_out(self, *argv):
+        return self.contract.functions.calcPoolInGivenSingleOut(*argv).call()
+
+    def calc_pool_out_given_single_in(self, *argv):
+        return self.contract.functions.calcPoolOutGivenSingleIn(*argv).call()
+
+    def calc_single_in_given_pool_out(self, *argv):
+        return self.contract.functions.calcSingleInGivenPoolOut(*argv).call()
+
+    def calc_single_out_given_pool_in(self, *argv):
+        return self.contract.functions.calcPoolOutGivenSingleIn(*argv).call()
+
+    def cal_spot_price(self, *argv):
+        return self.contract.functions.calcSpotPrice(*argv).call()
+
+    def get_balance(self, address):
+        return self.contract.functions.getBalance(address).call()
+
+    def get_denormalized_weight(self, token_address):
+        return self.contract.functions.getDenormalizedWeight(token_address).call()
+
+    def get_normalized_weight(self, token_address):
+        return self.contract.functions.getNormalizedWeight(token_address).call() #/ 10**16
+
+    def get_num_tokens(self):
+        return self.contract.functions.getNumTokens().call()
+
+    def get_spot_price(self, token_in_address, token_out_address):
+        return self.contract.functions.getSpotPrice(token_in_address, token_out_address).call()
+
+    def get_spot_price_sans_fee(self, token_in_address, token_out_address):
+        return self.contract.functions.getSpotPriceSansFee(token_in_address, token_out_address).call()
+
+    def is_bound(self, token_address):
+        return self.contract.functions.isBound(token_address).call()
