@@ -1,6 +1,11 @@
 # balancer-exchange-python
 Unofficial Python wrapper for balancer.exchange, for pools see https://pools.balancer.exchange/#/.
-Depends on web3 and graphql, infura key is needed.
+
+## Dependencies
+- web3 https://github.com/ethereum/web3.py
+- gql https://github.com/graphql-python/gql
+
+Note: Infura key is needed.
 
 ## Examples
 ```python
