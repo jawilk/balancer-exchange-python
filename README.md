@@ -104,4 +104,7 @@ BAL pool 5: 0x07B18C2686F3d1BA0Fa8C51edc856819f2b1100A
 BAL pool 6: 0x08a2f472096848AE465055cAa14FdaB94679e000       
 BAL pool 7: 0x097DB362F672832d27E52C3c3F97D3B0D442abd2    
 BAL pool 8: 0x0983Ca5edE50074AC268583E740DC14BD77af8c0         
-BAL pool 9: 0x102Efb11d588Fa03dfC9Fb5E0894Dd241839D3f8        
+BAL pool 9: 0x102Efb11d588Fa03dfC9Fb5E0894Dd241839D3f8     
+
+The author is in no way affiliated with or funded by Balancer, balancer.finance, or any subsidiaries or affiliates of any of the previously mentioned entities.
+
