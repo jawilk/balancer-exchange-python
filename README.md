@@ -1,5 +1,6 @@
 # balancer-exchange-python
 Unofficial Python wrapper for balancer.exchange, for pools see https://pools.balancer.exchange/#/.
+Balancer docu https://docs.balancer.finance/
 
 ## Dependencies
 - web3 https://github.com/ethereum/web3.py
