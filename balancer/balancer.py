@@ -154,7 +154,7 @@ class Pool:
         return self._set_value('getTotalDenormalizedWeight')
 
     def is_finalized(self):
-        return self._set_value('isFinalized)
+        return self._set_value('isFinalized')
 
     def is_public_swap(self):
         return self._set_value('isPublicSwap')
@@ -202,7 +202,7 @@ class Pool:
         return self.contract.functions.calcPoolInGivenSingleOut(*argv).call()
 
     def calc_pool_out_given_single_in(self, *argv):
-       '''argv:
+        '''argv:
            tokenBalanceIn
            tokenWeightIn
            poolSupply
