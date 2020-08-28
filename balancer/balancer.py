@@ -169,24 +169,79 @@ class Pool:
         return self._set_value('totalSupply')
 
     def calc_in_given_out(self, *argv):
+        '''argv:
+           tokenBalanceIn
+           tokenWeightIn
+           tokenBalanceOut
+           tokenWeightOut
+           tokenAmountOut
+           swapFee
+        '''
         return self.contract.functions.calcInGivenOut(*argv).call()
 
     def calc_out_given_in(self, *argv):
+        '''argv:
+           tokenBalanceIn
+           tokenWeightIn
+           tokenBalanceOut
+           tokenWeightOut
+           tokenAmountIn
+           swapFee
+        '''
         return self.contract.functions.calcOutGivenIn(*argv).call()
 
     def calc_pool_in_given_single_out(self, *argv):
+        '''argv:
+           tokenBalanceOut
+           tokenWeightOut
+           poolSupply
+           totalWeight
+           tokenAmountOut
+           swapFee
+        '''
         return self.contract.functions.calcPoolInGivenSingleOut(*argv).call()
 
     def calc_pool_out_given_single_in(self, *argv):
+       '''argv:
+           tokenBalanceIn
+           tokenWeightIn
+           poolSupply
+           totalWeight
+           tokenAmountIn
+           swapFee
+        '''
         return self.contract.functions.calcPoolOutGivenSingleIn(*argv).call()
 
     def calc_single_in_given_pool_out(self, *argv):
+        '''argv:
+           tokenBalanceIn
+           tokenWeightIn
+           poolSupply
+           totalWeight
+           tokenAmountOut
+           swapFee
+        '''
         return self.contract.functions.calcSingleInGivenPoolOut(*argv).call()
 
     def calc_single_out_given_pool_in(self, *argv):
+        '''argv:
+           tokenBalanceOut
+           tokenWeightOut
+           poolSupply
+           totalWeight
+           poolAmountIn
+           swapFee
+        '''
         return self.contract.functions.calcPoolOutGivenSingleIn(*argv).call()
 
     def cal_spot_price(self, *argv):
+        '''argv:
+           tokenBalanceIn
+           tokenWeightIn
+           tokenBalanceOut
+           tokenWeightOut
+           swapFee
+        '''
         return self.contract.functions.calcSpotPrice(*argv).call()
 
     def get_balance(self, address):
