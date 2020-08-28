@@ -15,7 +15,7 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 query = gql(
     """
   {
-  pools(first: 1, where: {publicSwap: true}) {
+  pools(first: 100, where: {publicSwap: true}) {
     id
     finalized
     publicSwap
@@ -52,4 +52,13 @@ for pool in pools:
         tokens = pool['tokens'],
     ))
 
-print(all_pools[0].get_final_tokens()[0].symbol)
+
+bal_pools = []
+for pool in all_pools:
+    for token in pool.final_tokens():
+        if token.symbol == 'BAL':
+            bal_pools.append(pool)
+            break
+
+for count, bal_pool in enumerate(bal_pools):
+    print(f'BAL pool {count}:', bal_pool.contract_address)
