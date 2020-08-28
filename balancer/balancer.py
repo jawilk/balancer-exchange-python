@@ -2,11 +2,8 @@ import json
 
 from web3 import Web3
 
-from utils import load_abi#, initialize_tokens
-import keys
+from utils import load_abi
 
-
-w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/'+keys.INFURA_ID))
 
 def initialize_tokens(tokens):
     all_tokens = []
@@ -50,15 +47,16 @@ class Pool:
     ABI_PATH = 'abi/BPool.abi'
 
     def __init__(
-        self, 
+        self,
+        w3,
         contract_address,
-        address_only = True,
         finalized=None,
         public_swap=None,
         swap_fee=None,
         total_weight=None,
         tokens_list=None,
         tokens=None,
+        bone=None,
     ):
         self.contract_address = contract_address
         self.contract_abi = load_abi(self.ABI_PATH)
@@ -67,32 +65,36 @@ class Pool:
                             abi=self.contract_abi,
                         )
 
-        # Pool properties, if initialized from graphql call
-        if not address_only:
-            self.finalized = finalized
-            self.public_swap = public_swap
-            self.swap_fee = swap_fee
-            self.total_weight = total_weight
-            self.tokens_list = tokens_list
-            self.tokens = initialize_tokens(tokens)
+        # Pool properties
+        self.properties = {
+            'finalized': finalized,
+            'public_swap': public_swap,
+            'swap_fee': swap_fee,
+            'total_weight': total_weight,
+            'tokens_list': tokens_list,
+            'getFinalTokens': initialize_tokens(tokens) if tokens else None,
+            'BONE': bone,
+            'getNormalizedWeight': None,
+        }
+
+    def _set_value(self, prop, *argv):
+        if argv:
+            self.properties[prop] = self.properties[prop] if self.properties[prop] else self.contract.get_function_by_name(prop)(*argv).call()
+            return self.properties[prop]
+        self.properties[prop] = self.properties[prop] if self.properties[prop] else self.contract.get_function_by_name(prop)().call()
+        return self.properties[prop]
 
     def get_bone(self):
-        return self.contract.functions.BONE().call()
+        return self._set_value('BONE')
 
     def get_num_tokens(self):
         return len(self.tokens)
 
     def get_final_tokens(self):
-        return self.contract.functions.getFinalTokens().call()
+        return self._set_value('getFinalTokens')
 
     def get_normalized_weight(self, address):
-        return self.contract.functions.getNormalizedWeight(address).call() / 10**16
+        return self._set_value('getNormalizedWeight', address) / 10**16
 
     def get_spot_price(self, address_in, address_out):
         return self.contract.functions.getSpotPrice(address_in, address_out).call()
-
-        
-
-weth_bal = Pool('0x59A19D8c652FA0284f44113D0ff9aBa70bd46fB4')
-print(weth_bal.get_final_tokens())
-print(weth_bal.get_normalized_weight(weth_bal.get_final_tokens()[0]))
