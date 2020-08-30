@@ -75,6 +75,7 @@ class Pool:
         }
 
     def _set_value(self, prop, *argv):
+        '''Fetch static information only once on demand'''
         if argv:
             self.properties[prop] = self.properties[prop] if self.properties.get(prop) else self.contract.get_function_by_name(prop)(*argv).call()
             return self.properties[prop]
