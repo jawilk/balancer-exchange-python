@@ -1,5 +1,5 @@
 # balancer-exchange-python
-Unofficial Python wrapper for balancer.exchange, for pools see https://pools.balancer.exchange/#/.   
+Python wrapper for balancer.exchange (unofficial), for pools see https://pools.balancer.exchange/#/.   
 Balancer documentation https://docs.balancer.finance/
 
 The author is in no way affiliated with or funded by Balancer, balancer.finance, or any subsidiaries or affiliates of any of the previously mentioned entities.
